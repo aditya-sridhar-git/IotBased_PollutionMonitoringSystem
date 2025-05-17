@@ -6,8 +6,8 @@ const char* password = "";   // Your Wi-Fi password
 
 WiFiClient client;
 
-unsigned long myChannelNumber = 2965771;        // Replace with your ThingSpeak channel number
-const char* myWriteAPIKey = "I6D9WGROEFOLZJIE";     // Replace with your ThingSpeak Write API Key
+unsigned long myChannelNumber = ;        // Replace with your ThingSpeak channel number
+const char* myWriteAPIKey = "";     // Replace with your ThingSpeak Write API Key
 
 void setup() {
   Serial.begin(115200);
