@@ -10,7 +10,7 @@ unsigned long channelID = YOUR_CHANNEL_ID; // Replace with your channel ID
 const char* writeAPIKey = "YOUR_WRITE_API_KEY"; // Replace with your write API key
 
 // Sensor pins
-#define MQ2_PIN 34  // Analog pin for MQ-2
+#define MQ2_PIN 33  // Analog pin for MQ-2
 #define MQ7_PIN 35  // Analog pin for MQ-7
 
 // Calibration values
