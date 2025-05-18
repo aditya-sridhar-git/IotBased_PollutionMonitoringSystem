@@ -21,17 +21,26 @@ WiFiClient client;
 
 void setup() {
   Serial.begin(115200);
-  
-  // Connect to WiFi
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+
+  int timeout = 0;
+  WiFi.begin(ssid, password);  // Connect to WiFi
+  while (WiFi.status() != WL_CONNECTED && timeout < 20) {
     delay(500);
     Serial.print(".");
+    timeout++;
   }
-  Serial.println("\nWiFi connected!");
+
+  if (Wifi.status() == WL_connected){
+    Serial.println("\nWiFi connected");
+    Serial.println("IP: " + WiFi.loaclIP());
+  }
+  else{
+    Serial.println("\nFailed Rebooting");
+    Serial.println("Restarting ESP32");
+    ESP.restart();
+  }
   
-  // Initialize ThingSpeak
-  ThingSpeak.begin(client);
+  ThingSpeak.begin(client); // Initialize ThingSpeak
 }
 
 float readMQ2() {
