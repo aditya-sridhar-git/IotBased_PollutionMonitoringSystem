@@ -1,0 +1,175 @@
+/* static/styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 128, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 2.5em;
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #2f4f4f;
+    font-size: 1.1em;
+}
+
+.nav-pills {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.nav-pill {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 15px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-pill:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 128, 0, 0.2);
+}
+
+.nav-pill.active {
+    background: linear-gradient(45deg, #43cea2, #185a9d);
+    color: white;
+}
+
+.sensor-page {
+    display: none;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 128, 0, 0.1);
+}
+
+.sensor-page.active {
+    display: block;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #e0f2f1;
+}
+
+.page-header .icon {
+    font-size: 3em;
+    background: linear-gradient(45deg, #43cea2, #185a9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header h2 {
+    font-size: 2.2em;
+    color: #2c3e50;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.metric-card {
+    background: linear-gradient(135deg, #b2fefa 0%, #0ed2f7 100%);
+    border-radius: 15px;
+    padding: 25px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(14, 210, 247, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-value {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 1.1em;
+}
+
+.metric-unit {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .nav-pills {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 2em;
+    }
+}
