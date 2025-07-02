@@ -1,3 +1,4 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Environmental Monitoring Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=2" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -20,12 +21,12 @@
             <button class="nav-pill active" onclick="showPage('microphone-sensor', this)">📢 LOUDNESS</button>
             <button class="nav-pill" onclick="showPage('pm-sensor', this)">💨 PM Sensor</button>
             <button class="nav-pill" onclick="showPage('mq-sensors', this)">☠️ MQ Sensors</button>
+            <button class="nav-pill" onclick="showPage('dht-sensor', this)">🌡️ Temp/Humidity</button>
         </div>
 
-        <!-- Microphone -->
+        <!-- Loudness -->
         <div id="microphone-sensor" class="sensor-page active">
-            <div class="page-header">
-                <span class="icon">📢</span>
+            <div class="page-header"><span class="icon">📢</span>
                 <div>
                     <h2>Microphone Sensor</h2>
                 </div>
@@ -40,20 +41,14 @@
             <canvas id="chart_loudness" height="100"></canvas>
         </div>
 
-        <!-- PM Sensor -->
+        <!-- PM Sensors -->
         <div id="pm-sensor" class="sensor-page">
-            <div class="page-header">
-                <span class="icon">💨</span>
+            <div class="page-header"><span class="icon">💨</span>
                 <div>
                     <h2>Particulate Matter Sensor</h2>
                 </div>
             </div>
             <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-value" id="pm1">--</div>
-                    <div class="metric-label">PM1.0</div>
-                    <div class="metric-unit">μg/m³</div>
-                </div>
                 <div class="metric-card">
                     <div class="metric-value" id="pm25">--</div>
                     <div class="metric-label">PM2.5</div>
@@ -65,15 +60,13 @@
                     <div class="metric-unit">μg/m³</div>
                 </div>
             </div>
-            <canvas id="chart_pm1" height="100"></canvas>
             <canvas id="chart_pm25" height="100"></canvas>
             <canvas id="chart_pm10" height="100"></canvas>
         </div>
 
         <!-- MQ Sensors -->
         <div id="mq-sensors" class="sensor-page">
-            <div class="page-header">
-                <span class="icon">☠️</span>
+            <div class="page-header"><span class="icon">☠️</span>
                 <div>
                     <h2>MQ Sensors</h2>
                 </div>
@@ -96,9 +89,30 @@
                 </div>
             </div>
         </div>
+
+        <!-- DHT Sensor -->
+        <div id="dht-sensor" class="sensor-page">
+            <div class="page-header"><span class="icon">🌡️</span>
+                <div>
+                    <h2>Temperature and Humidity</h2>
+                </div>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="Temperature">--</div>
+                    <div class="metric-label">Temperature</div>
+                    <div class="metric-unit">℃</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="Humidity">--</div>
+                    <div class="metric-label">Humidity</div>
+                    <div class="metric-unit">%</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}?v=2"></script>
 </body>
 
 </html>

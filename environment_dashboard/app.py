@@ -1,67 +1,25 @@
-from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
-from sklearn.ensemble import RandomForestRegressor
-import pandas as pd
-import numpy as np
-import requests
+# app.py (Flask backend)
+from flask import Flask, render_template, send_from_directory, jsonify
+import os
 
 app = Flask(__name__)
-CORS(app)
 
-models = {}
-
-# ThingSpeak channel data URL
-THINGSPEAK_URL = "https://api.thingspeak.com/channels/2965771/feeds.json?api_key=I6D9WGROEFOLZJIE"
-
+# Serve the dashboard
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/train-models', methods=['GET'])
-def train_models():
-    global models
+# Route to serve the JSON file for ML results
+data_folder = os.path.join(app.root_path, 'static')
+@app.route('/download-ml-results')
+def download_ml_results():
+    return send_from_directory(data_folder, 'ml_results.json', as_attachment=True)
 
-    # Fetch data from ThingSpeak
-    response = requests.get(THINGSPEAK_URL)
-    data = response.json()
-    feeds = data['feeds']
-    df = pd.DataFrame(feeds)
-
-    # Fields for sensors: PM1.0, PM2.5, PM10, Loudness
-    fields = ['field1', 'field2', 'field3', 'field6']
-    models = {}
-
-    # Convert sensor fields to numeric
-    for f in fields:
-        df[f] = pd.to_numeric(df[f], errors='coerce')
-
-    df.dropna(inplace=True)  # Remove rows with NaNs
-
-    # Train RandomForest for each field
-    for f in fields:
-        x = np.array(range(len(df))).reshape(-1, 1)  # time axis
-        y = df[f].values
-        model = RandomForestRegressor(n_estimators=100, random_state=42)
-        model.fit(x, y)
-        pred = model.predict(x)
-        models[f] = {
-            "model": model,
-            "original": list(range(len(df))),
-            "actual": y.tolist(),
-            "predicted": pred.tolist(),
-            "accuracy": model.score(x, y),
-            "latest": y[-1] if len(y) > 0 else None
-        }
-
-    # Return predictions and accuracy to frontend
-    return jsonify({f: {
-        "original": models[f]["original"],
-        "actual": models[f]["actual"],
-        "predicted": models[f]["predicted"],
-        "accuracy": models[f]["accuracy"],
-        "latest": models[f]["latest"]
-    } for f in models})
-
+# Route to serve JSON content to JS fetch
+@app.route('/train-models')
+def serve_ml_data():
+    with open(os.path.join(data_folder, 'ml_results.json')) as f:
+        return jsonify(eval(f.read()))  # Replace eval with json.load for safety
 
 if __name__ == '__main__':
     app.run(debug=True)

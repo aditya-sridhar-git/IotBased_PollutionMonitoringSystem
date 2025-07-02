@@ -1,6 +1,7 @@
 const channelId = '2965771';
 const readApiKey = 'I6D9WGROEFOLZJIE';
 
+// Fetch single sensor value from ThingSpeak
 async function fetchThingSpeak(fieldId) {
     const url = `https://api.thingspeak.com/channels/${channelId}/fields/${fieldId}.json?api_key=${readApiKey}&results=1`;
     const res = await fetch(url);
@@ -8,17 +9,19 @@ async function fetchThingSpeak(fieldId) {
     return data.feeds[0][`field${fieldId}`];
 }
 
+// Update all live sensor values
 async function updateRealTimeData() {
-    // Real sensor values from ThingSpeak
-    document.getElementById("dB").textContent = await fetchThingSpeak(6);     // Loudness
-    document.getElementById("pm1").textContent = await fetchThingSpeak(1);    // PM1.0
-    document.getElementById("pm25").textContent = await fetchThingSpeak(2);   // PM2.5
-    document.getElementById("pm10").textContent = await fetchThingSpeak(3);   // PM10
-    document.getElementById("mq7_ppb").textContent = await fetchThingSpeak(4);  // MQ7
-    document.getElementById("mq2_ppb").textContent = await fetchThingSpeak(5);  // MQ2
-    document.getElementById("mq135_ppb").textContent = await fetchThingSpeak(7); // MQ135
+    document.getElementById("mq135_ppb").textContent = await fetchThingSpeak(1);
+    document.getElementById("mq7_ppb").textContent = await fetchThingSpeak(2);
+    document.getElementById("mq2_ppb").textContent = await fetchThingSpeak(3);
+    document.getElementById("dB").textContent = await fetchThingSpeak(4);
+    document.getElementById("pm25").textContent = await fetchThingSpeak(5);
+    document.getElementById("pm10").textContent = await fetchThingSpeak(6);
+    document.getElementById("Temperature").textContent = await fetchThingSpeak(7);
+    document.getElementById("Humidity").textContent = await fetchThingSpeak(8);
 }
 
+// Handle tab switching between sensor sections
 function showPage(id, btn) {
     document.querySelectorAll('.sensor-page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -26,16 +29,21 @@ function showPage(id, btn) {
     btn.classList.add('active');
 }
 
+// Fetch ML data and render graphs
 async function fetchMLDataAndRenderCharts() {
-    const res = await fetch('/train-models');
-    const data = await res.json();
+    try {
+        const res = await fetch('/train-models');
+        const data = await res.json();
 
-    if (data.field6) drawChart("chart_loudness", data.field6, "Loudness (dB)");
-    if (data.field1) drawChart("chart_pm1", data.field1, "PM1.0");
-    if (data.field2) drawChart("chart_pm25", data.field2, "PM2.5");
-    if (data.field3) drawChart("chart_pm10", data.field3, "PM10");
+        if (data.field4) drawChart("chart_loudness", data.field4, "Loudness (dB)");
+        if (data.field5) drawChart("chart_pm25", data.field5, "PM2.5");
+        if (data.field6) drawChart("chart_pm10", data.field6, "PM10");
+    } catch (err) {
+        console.error("Error fetching ML data:", err);
+    }
 }
 
+// Render chart using Chart.js
 function drawChart(canvasId, data, label) {
     const ctx = document.getElementById(canvasId).getContext("2d");
     new Chart(ctx, {
@@ -72,7 +80,7 @@ function drawChart(canvasId, data, label) {
     });
 }
 
-// Update data and graphs on load and every 5 seconds
+// Initial calls
 setInterval(updateRealTimeData, 5000);
 updateRealTimeData();
 fetchMLDataAndRenderCharts();
